@@ -29,6 +29,11 @@ public class TutorialController {
   @Autowired
   TutorialRepository tutorialRepository;
 
+  @GetMapping("/")
+  public String home() {
+    return "Welcome to Spring Boot App running in Docker!";
+  }
+
   @GetMapping("/tutorials")
   public ResponseEntity<List<Tutorial>> getAllTutorials(@RequestParam(required = false) String title) {
     try {
