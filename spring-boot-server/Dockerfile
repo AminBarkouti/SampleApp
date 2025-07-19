@@ -1,15 +1,11 @@
-# Use multi-stage build
-FROM openjdk:17-jdk-slim as builder
-WORKDIR /app
-COPY .mvn/ .mvn
-COPY mvnw pom.xml ./
-RUN ./mvnw dependency:go-offline
-COPY src ./src
-RUN ./mvnw package -DskipTests
+# Use OpenJDK base image
+FROM openjdk:17-jdk-slim
 
-# Final lightweight image
-FROM openjdk:17-jre-slim
-WORKDIR /app
-COPY --from=builder /app/target/*.jar app.jar
-EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Add metadata (optional)
+LABEL maintainer="Mohamed Amin Barkouti"
+
+# Copy the .jar file to the container
+COPY target/spring-boot-jpa-h2-0.0.1-SNAPSHOT.jar app.jar
+
+# Run the .jar file
+ENTRYPOINT ["java", "-jar", "/app.jar"]
